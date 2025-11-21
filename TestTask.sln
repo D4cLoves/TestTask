@@ -1,8 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask_API", "TestTask_API\TestTask_API.csproj", "{F1361F59-61E0-4BF6-92FE-CF55EE22BF3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1361F59-61E0-4BF6-92FE-CF55EE22BF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1361F59-61E0-4BF6-92FE-CF55EE22BF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1361F59-61E0-4BF6-92FE-CF55EE22BF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1361F59-61E0-4BF6-92FE-CF55EE22BF3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
