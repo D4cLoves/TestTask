@@ -1,6 +1,14 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace TestTask_API.Controllers;
 
-public class TestController
+[ApiController]
+[Route("api/[controller]")]
+public class TestController : ControllerBase
 {
-    
+    [HttpGet]
+    public IActionResult Get()
+    {
+        return Ok(new { Message = "Hello World" });
+    }
 }

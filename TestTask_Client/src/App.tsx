@@ -4,7 +4,12 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const TestClick = async () => {
+      var response = await fetch('http://localhost:5119/api/Test');
+      var res = await response.json();
+      console.log(res);
+    }
 
   return (
     <>
@@ -21,6 +26,7 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+          <button onClick={TestClick}></button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
