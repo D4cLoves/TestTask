@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import PatientList from './components/PatientList';
-import DoctorList from './components/DoctorList';
-import DiseaseList from './components/DiseaseList';
+import PatientList from "./components/PatientList/PatientList.tsx";
+import DoctorList from "./components/DoctorList/DoctorList.tsx";
+import DiseaseList from "./components/DiseaseList/DiseaseList.tsx";
 import './App.css';
 
 type Tab = 'patients' | 'doctors' | 'diseases';
