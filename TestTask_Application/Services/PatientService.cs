@@ -1,4 +1,5 @@
 using TestTask_Domain.Entites;
+using TestTask_Domain.ValueObject;
 using TestTask_Infrastructure.Repositories;
 
 namespace TestTask_Application.Services;
@@ -19,5 +20,11 @@ public class PatientService
     public async Task<List<Patient>> GetPatients()
     {
         return await _patientRepository.GetPatients();
+    }
+    
+    public async Task UpdatePatientNameAsync(Guid id, string newName)
+    {
+        var newFullName = FullName.Create(newName);
+        await _patientRepository.UpdatePatientNameAsync(id, newFullName);
     }
 }

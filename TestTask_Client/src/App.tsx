@@ -1,41 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import PatientList from './components/PatientList';
+import DoctorList from './components/DoctorList';
+import DiseaseList from './components/DiseaseList';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0);
-  const TestClick = async () => {
-      var response = await fetch('http://localhost:5119/api/Test');
-      var res = await response.json();
-      console.log(res);
-    }
+type Tab = 'patients' | 'doctors' | 'diseases';
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-          <button onClick={TestClick}></button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+const App: React.FC = () => {
+    const [activeTab, setActiveTab] = useState<Tab>('patients');
 
-export default App
+    return (
+        <div className="App">
+            <h1>Медицинская система</h1>
+
+            <div className="tabs">
+                <button
+                    onClick={() => setActiveTab('patients')}
+                    className={activeTab === 'patients' ? 'active' : ''}
+                >
+                    Пациенты
+                </button>
+                <button
+                    onClick={() => setActiveTab('doctors')}
+                    className={activeTab === 'doctors' ? 'active' : ''}
+                >
+                    Доктора
+                </button>
+                <button
+                    onClick={() => setActiveTab('diseases')}
+                    className={activeTab === 'diseases' ? 'active' : ''}
+                >
+                    Болезни
+                </button>
+            </div>
+
+            <div className="content">
+                {activeTab === 'patients' && <PatientList />}
+                {activeTab === 'doctors' && <DoctorList />}
+                {activeTab === 'diseases' && <DiseaseList />}
+            </div>
+        </div>
+    );
+};
+
+export default App;
