@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TestTask_Application\TestTask_Application.csproj" />
       <ProjectReference Include="..\TestTask_Infrastructure\TestTask_Infrastructure.csproj" />
     </ItemGroup>
 

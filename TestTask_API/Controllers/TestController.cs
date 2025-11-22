@@ -7,7 +7,7 @@ namespace TestTask_API.Controllers;
 public class TestController : ControllerBase
 {
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult GetAll()
     {
         return Ok(new { Message = "Hello World" });
     }
