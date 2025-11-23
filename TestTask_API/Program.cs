@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using TestTask_Application.Services;
+using TestTask_Domain.Entites;
+using TestTask_Domain.Interfaces;
+using TestTask_Domain.ValueObject;
 using TestTask_Infrastructure.Data;
+using TestTask_Infrastructure.Repositories;
+
 namespace TestTask_API;
 
 public class Program
@@ -7,44 +14,51 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
         builder.Services.AddAuthorization();
-
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        builder.Services.AddOpenApi();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddControllers();
         
         builder.Services.AddApplicationDbContext("Data Source=testtask.db");
+        
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowVite", policy =>
+            {
+                policy.WithOrigins(
+                        "http://localhost:5173"
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
+
+        builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+        builder.Services.AddScoped<PatientRepository>();
+        builder.Services.AddScoped<IDieseasRepository, DiseaseRepository>();
+        builder.Services.AddScoped<DiseaseRepository>();
+        builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+        builder.Services.AddScoped<DoctorRepository>();
+        
+        builder.Services.AddScoped<PatientService>();
+        builder.Services.AddScoped<DiseaseService>();
+        builder.Services.AddScoped<DoctorService>();
 
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseCors("AllowVite");
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
-
-        var summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-            {
-                var forecast = Enumerable.Range(1, 5).Select(index =>
-                        new WeatherForecast
-                        {
-                            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                            TemperatureC = Random.Shared.Next(-20, 55),
-                            Summary = summaries[Random.Shared.Next(summaries.Length)]
-                        })
-                    .ToArray();
-                return forecast;
-            })
-            .WithName("GetWeatherForecast");
+        
+        app.MapControllers();
 
         app.Run();
     }

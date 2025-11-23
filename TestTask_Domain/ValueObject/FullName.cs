@@ -4,7 +4,7 @@ public class FullName
 {
     public string Value { get; }
 
-    private FullName(string value)
+    public FullName(string value)
     {
         Value = value;
     }

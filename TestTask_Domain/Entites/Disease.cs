@@ -2,7 +2,7 @@ namespace TestTask_Domain.Entites;
 
 public class Disease
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; }    
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     
