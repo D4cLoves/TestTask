@@ -4,32 +4,43 @@ import { api } from "../../services/api.ts";
 
 const PatientList: React.FC = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
-    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-    const [newFirstName, setNewFirstName] = useState('');
-    const [newLastName, setNewLastName] = useState('');
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [newName, setNewName] = useState('');
 
     useEffect(() => {
         loadPatients();
     }, []);
 
     const loadPatients = async () => {
-        try {
-            const data = await api.getPatients();
-            setPatients(data);
-        } catch (error) {
-            console.error('Ошибка загрузки пациентов:', error);
-        }
+        const data = await api.getPatients();
+        setPatients(data);
+
     };
 
-    const updatePatientName = async (id: string) => {
-        if (!newFirstName.trim() || !newLastName.trim()) return;
+    const startEdit = (patient: Patient) => {
+        setEditingId(patient.id);
+        setNewName(patient.name.value || patient.name.Value || '');
+    };
+
+    const cancelEdit = () => {
+        setEditingId(null);
+        setNewName('');
+    };
+
+    const saveEdit = async (id: string) => {
+        const nameParts = newName.trim().split(' ');
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+
+        if (!firstName || !lastName) {
+            alert('Введите имя и фамилию');
+            return;
+        }
 
         try {
-            await api.updatePatientName(id, newFirstName, newLastName);
-            setNewFirstName('');
-            setNewLastName('');
-            loadPatients(); // Перезагружаем список
-            alert('Имя обновлено!');
+            await api.updatePatientName(id, firstName, lastName);
+            await loadPatients();
+            cancelEdit();
         } catch (error) {
             alert('Ошибка обновления имени');
         }
@@ -38,48 +49,46 @@ const PatientList: React.FC = () => {
     return (
         <div>
             <h2>Список пациентов</h2>
-
-            {/* Форма обновления имени */}
-            {selectedPatient && (
-                <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px 0' }}>
-                    <h3>Обновить имя пациента</h3>
-                    <p>Текущее: {selectedPatient.name.firstName} {selectedPatient.name.lastName}</p>
-                    <input
-                        value={newFirstName}
-                        onChange={(e) => setNewFirstName(e.target.value)}
-                        placeholder="Новое имя"
-                    />
-                    <input
-                        value={newLastName}
-                        onChange={(e) => setNewLastName(e.target.value)}
-                        placeholder="Новая фамилия"
-                    />
-                    <button onClick={() => updatePatientName(selectedPatient.id)}>
-                        Обновить
-                    </button>
-                </div>
-            )}
-
-            {/* Список пациентов */}
-            <div>
-                {patients.map(patient => (
-                    <div
-                        key={patient.id}
-                        style={{
-                            border: '1px solid #ddd',
-                            margin: '5px',
-                            padding: '10px',
-                            cursor: 'pointer',
-                            backgroundColor: selectedPatient?.id === patient.id ? '#f0f0f0' : 'white'
-                        }}
-                        onClick={() => setSelectedPatient(patient)}
-                    >
-                        <strong>{patient.name.firstName} {patient.name.lastName}</strong>
-                        <br />
-                        Дата рождения: {new Date(patient.birthDate).toLocaleDateString()}
-                    </div>
-                ))}
-            </div>
+            <table border={1} cellPadding="10" cellSpacing="0" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                    <tr style={{ backgroundColor: '#f0f0f0' }}>
+                        <th>№</th>
+                        <th>ФИО</th>
+                        <th>Дата рождения</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {patients.map((patient, index) => (
+                        <tr key={patient.id}>
+                            <td>{index + 1}</td>
+                            <td>
+                                {editingId === patient.id ? (
+                                    <input
+                                        type="text"
+                                        value={newName}
+                                        onChange={(e) => setNewName(e.target.value)}
+                                        style={{ width: '200px', padding: '5px' }}
+                                    />
+                                ) : (
+                                    patient.name.value || patient.name.Value || 'Не указано'
+                                )}
+                            </td>
+                            <td>{new Date(patient.birthDate).toLocaleDateString('ru-RU')}</td>
+                            <td>
+                                {editingId === patient.id ? (
+                                    <>
+                                        <button onClick={() => saveEdit(patient.id)} style={{ marginRight: '5px' }}>Сохранить</button>
+                                        <button onClick={cancelEdit}>Отмена</button>
+                                    </>
+                                ) : (
+                                    <button onClick={() => startEdit(patient)}>Редактировать</button>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

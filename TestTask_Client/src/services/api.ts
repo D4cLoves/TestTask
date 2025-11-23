@@ -5,7 +5,7 @@ const API_BASE = 'http://localhost:5119/api';
 export const api = {
     // Пациенты
     getPatients: (): Promise<Patient[]> =>
-        fetch(`${API_BASE}/patient`).then(res => {
+        fetch(`${API_BASE}/patients`).then(res => {
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             return res.json();
         }),
@@ -14,8 +14,12 @@ export const api = {
         fetch(`${API_BASE}/patients/${id}`).then(res => res.json()),
 
     updatePatientName: (id: string, firstName: string, lastName: string): Promise<void> =>
-        fetch(`${API_BASE}/patients/${id}/name?firstName=${firstName}&lastName=${lastName}`, {
-            method: 'PATCH'
+        fetch(`${API_BASE}/patients/${id}/name`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(`${firstName} ${lastName}`)
         }).then(res => {
             if (!res.ok) throw new Error('Ошибка обновления');
         }),

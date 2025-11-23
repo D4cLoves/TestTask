@@ -6,7 +6,7 @@ using TestTask_Infrastructure.Repositories;
 namespace TestTask_API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/doctors")]
 public class DoctorController : ControllerBase
 {
     private readonly DoctorService _doctorService;
@@ -16,7 +16,7 @@ public class DoctorController : ControllerBase
         _doctorService = doctorService;
     }
 
-    [HttpGet("{speciality}")]
+    [HttpGet("specialty/{speciality}")]
     public async Task<ActionResult<List<Doctor>>> GetDoctorsBySpeciality(string speciality)
     {
         return await _doctorService.GetDoctorsBySpeciality(speciality);

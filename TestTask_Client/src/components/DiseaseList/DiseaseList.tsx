@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type {Disease} from "../../types";
 import { api } from "../../services/api.ts";
+
 const DiseaseList: React.FC = () => {
     const [diseases, setDiseases] = useState<Disease[]>([]);
 
@@ -9,26 +10,31 @@ const DiseaseList: React.FC = () => {
     }, []);
 
     const loadDiseases = async () => {
-        try {
-            const data = await api.getDiseases();
-            setDiseases(data);
-        } catch (error) {
-            console.error('Ошибка загрузки болезней:', error);
-        }
+        const data = await api.getDiseases();
+        setDiseases(data);
     };
 
     return (
         <div>
-            <h2>Общий список болезней</h2>
-            <div>
-                {diseases.map(disease => (
-                    <div key={disease.id} style={{ border: '1px solid #ddd', margin: '5px', padding: '10px' }}>
-                        <strong>{disease.name}</strong>
-                        <br />
-                        {disease.description}
-                    </div>
-                ))}
-            </div>
+            <h2>Справочник болезней</h2>
+            <table border={1} cellPadding="10" cellSpacing="0" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                    <tr style={{ backgroundColor: '#f0f0f0' }}>
+                        <th>№</th>
+                        <th>Название</th>
+                        <th>Описание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {diseases.map((disease, index) => (
+                        <tr key={disease.id}>
+                            <td>{index + 1}</td>
+                            <td><strong>{disease.name}</strong></td>
+                            <td>{disease.description}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

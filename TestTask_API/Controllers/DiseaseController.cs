@@ -5,7 +5,7 @@ using TestTask_Domain.Entites;
 namespace TestTask_API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/diseases")]
 public class DiseaseController : ControllerBase
 {
     private readonly DiseaseService  _diseaseService;

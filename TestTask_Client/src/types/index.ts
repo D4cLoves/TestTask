@@ -1,8 +1,8 @@
 export interface Patient {
     id: string;
     name: {
-        firstName: string;
-        lastName: string;
+        value?: string;
+        Value?: string;
     };
     birthDate: string;
     doctorId: string;
@@ -11,8 +11,8 @@ export interface Patient {
 export interface Doctor {
     id: string;
     name: {
-        firstName: string;
-        lastName: string;
+        value?: string;
+        Value?: string;
     };
     specialty: string;
     birthDate: string;

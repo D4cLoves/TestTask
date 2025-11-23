@@ -6,7 +6,7 @@ using TestTask_Domain.ValueObject;
 namespace TestTask_API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/patients")]
 public class PatientController : ControllerBase
 {
     private readonly PatientService _patientService;

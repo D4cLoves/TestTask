@@ -27,7 +27,7 @@ public class PatientRepository : IPatientRepository
     public async Task UpdatePatientNameAsync(Guid id, FullName newName)
     {
         var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
-        if (patient == null)
+        if (patient != null)
         {
             patient.UpdateName(newName);
             await _context.SaveChangesAsync();

@@ -8,37 +8,47 @@ const DoctorList: React.FC = () => {
 
     const searchDoctors = async () => {
         if (!specialty.trim()) return;
-
-        try {
-            const data = await api.getDoctorsBySpecialty(specialty);
-            setDoctors(data);
-        } catch (error) {
-            console.error('Ошибка загрузки докторов:', error);
-        }
+        const data = await api.getDoctorsBySpecialty(specialty);
+        setDoctors(data);
+        
     };
 
     return (
         <div>
-            <h2>Доктора по специальности</h2>
-            <div>
+            <h2>Поиск докторов по специальности</h2>
+            <div style={{ marginBottom: '20px' }}>
                 <input
+                    type="text"
                     value={specialty}
                     onChange={(e) => setSpecialty(e.target.value)}
-                    placeholder="Введите специальность (терапевт, хирург...)"
-                    style={{ marginRight: '10px' }}
+                    placeholder="Введите специальность"
+                    style={{ padding: '8px', marginRight: '10px', width: '300px' }}
                 />
                 <button onClick={searchDoctors}>Найти</button>
             </div>
 
-            <div>
-                {doctors.map(doctor => (
-                    <div key={doctor.id} style={{ border: '1px solid #ddd', margin: '5px', padding: '10px' }}>
-                        <strong>{doctor.name.firstName} {doctor.name.lastName}</strong>
-                        <br />
-                        Специальность: {doctor.specialty}
-                    </div>
-                ))}
-            </div>
+            {doctors.length > 0 && (
+                <table border={1} cellPadding="10" cellSpacing="0" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead>
+                        <tr style={{ backgroundColor: '#f0f0f0' }}>
+                            <th>№</th>
+                            <th>ФИО</th>
+                            <th>Специальность</th>
+                            <th>Дата рождения</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {doctors.map((doctor, index) => (
+                            <tr key={doctor.id}>
+                                <td>{index + 1}</td>
+                                <td>{doctor.name.value || doctor.name.Value || 'Не указано'}</td>
+                                <td>{doctor.specialty}</td>
+                                <td>{new Date(doctor.birthDate).toLocaleDateString('ru-RU')}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
         </div>
     );
 };
