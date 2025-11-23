@@ -18,6 +18,7 @@
     <ItemGroup>
       <ProjectReference Include="..\TestTask_Application\TestTask_Application.csproj" />
       <ProjectReference Include="..\TestTask_Infrastructure\TestTask_Infrastructure.csproj" />
+        <ProjectReference Include="..\TestTask_ServiceDefaults\TestTask_ServiceDefaults.csproj"/>
     </ItemGroup>
 
 </Project>

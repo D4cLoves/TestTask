@@ -1,6 +1,6 @@
 import {type Patient, type Doctor, type Disease} from '../types';
 
-const API_BASE = 'http://localhost:5119/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5119/api';
 
 export const api = {
     // Пациенты
