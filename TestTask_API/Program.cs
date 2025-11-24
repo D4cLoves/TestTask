@@ -14,12 +14,18 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.AddServiceDefaults();
+
         builder.Services.AddAuthorization();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddControllers();
         
-        builder.Services.AddApplicationDbContext("Data Source=testtask.db");
+        //builder.Services.AddApplicationDbContext("Data Source=testtask.db");
+        var connectionString = builder.Configuration.GetConnectionString("sqlitedb") 
+                               ?? "Data Source=testtask.db";
+        builder.Services.AddApplicationDbContext(connectionString);
+        
         
         builder.Services.AddCors(options =>
         {
@@ -59,6 +65,8 @@ public class Program
         app.UseAuthorization();
         
         app.MapControllers();
+
+        app.MapDefaultEndpoints();
 
         app.Run();
     }
